@@ -1,0 +1,21 @@
+# Project TODO
+
+- [x] Personalizar a identidade visual e a navegação principal do Finanças Open Finance.
+- [x] Criar modelos financeiros para contas, transações, categorias, orçamento e conexões.
+- [x] Implementar persistência local das informações financeiras no dispositivo.
+- [x] Criar painel inicial com saldo, receitas, despesas e progresso de orçamento.
+- [x] Criar lista, cadastro, edição e exclusão de transações.
+- [x] Criar gestão de orçamento mensal e categorias.
+- [x] Criar gestão de contas manuais e tela de conexão Open Finance.
+- [x] Estruturar adaptador seguro de provedor e retorno de consentimento para Open Finance.
+- [x] Criar ícone próprio e aplicar o branding do aplicativo.
+- [x] Validar tipos, testes automatizados e fluxos essenciais do aplicativo.
+- [x] Entregar a primeira versão sem importação bancária real, com ponto de ativação futura para um provedor de Open Finance.
+- [ ] Usar o Pluggy como provedor da integração real de Open Finance.
+- [ ] Configurar credenciais de homologação do Pluggy exclusivamente no backend.
+- [ ] Implementar consentimento, retorno e sincronização real de contas e transações do Pluggy.
+- [ ] Configurar e validar no backend as credenciais de homologação do Pluggy recebidas com segurança.
+- [ ] Regenerar as credenciais do Pluggy antes de qualquer uso em produção, pois foram compartilhadas em uma imagem.
+- [ ] Transformar a versão mobile em PWA instalável pelo Safari, preservando a navegação e os dados locais.
+- [ ] Configurar manifest, ícones e orientação de instalação da PWA.
+- [ ] Validar a versão web e disponibilizar um link de acesso para instalação.
