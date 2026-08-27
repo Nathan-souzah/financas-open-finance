@@ -1,0 +1,64 @@
+# Project TODO
+
+- [x] Personalizar a identidade visual e a navegação principal do Finanças Open Finance.
+- [x] Criar modelos financeiros para contas, transações, categorias, orçamento e conexões.
+- [x] Implementar persistência local das informações financeiras no dispositivo.
+- [x] Criar painel inicial com saldo, receitas, despesas e progresso de orçamento.
+- [x] Criar lista, cadastro, edição e exclusão de transações.
+- [x] Criar gestão de orçamento mensal e categorias.
+- [x] Criar gestão de contas manuais e tela de conexão Open Finance.
+- [x] Estruturar adaptador seguro de provedor e retorno de consentimento para Open Finance.
+- [x] Criar ícone próprio e aplicar o branding do aplicativo.
+- [x] Validar tipos, testes automatizados e fluxos essenciais do aplicativo.
+- [x] Entregar a primeira versão sem importação bancária real, com ponto de ativação futura para um provedor de Open Finance.
+- [ ] Usar o Pluggy como provedor da integração real de Open Finance.
+- [ ] Configurar credenciais de homologação do Pluggy exclusivamente no backend.
+- [ ] Implementar consentimento, retorno e sincronização real de contas e transações do Pluggy.
+- [ ] Configurar e validar no backend as credenciais de homologação do Pluggy recebidas com segurança.
+- [ ] Regenerar as credenciais do Pluggy antes de qualquer uso em produção, pois foram compartilhadas em uma imagem.
+- [x] Transformar a versão mobile em PWA instalável pelo Safari, preservando a navegação e os dados locais.
+- [x] Configurar manifest, ícones e orientação de instalação da PWA.
+- [x] Validar a versão web e disponibilizar um link de acesso para instalação.
+- [x] Implementar endpoint seguro para iniciar o consentimento no Pluggy.
+- [x] Implementar retorno de consentimento e normalização de contas e transações do Pluggy.
+- [x] Preparar manifest, service worker e instruções da PWA após a integração.
+- [ ] Exibir no app apenas o status da integração Pluggy e orientar a edição das credenciais pelo painel seguro do projeto.
+- [ ] Documentar a troca de credenciais demo para produção sem expor Client Secret no frontend.
+- [x] Pular temporariamente a validação técnica do Pluggy, mantendo a integração bancária pendente.
+- [x] Entregar a PWA como versão imediata de acesso pelo Safari.
+- [x] Configurar a PWA para instalação pelo Safari e disponibilizar um link HTTPS temporário para teste.
+- [x] Documentar o procedimento de substituição segura das credenciais demo do Pluggy pelas credenciais reais.
+- [x] Preservar o valor atual de OPEN_FINANCE_PROVIDER e não alterar credenciais durante a entrega da PWA.
+- [x] Criar a jornada visual de consentimento Pluggy Connect com estados de preparação, abertura e retorno.
+- [x] Implementar retorno por deep link e feedback de conexão concluída, cancelada ou com erro.
+- [x] Integrar a sincronização das contas autorizadas ao modelo local sem expor credenciais.
+- [x] Testar o fluxo Pluggy Connect com dados determinísticos e documentar a ativação real.
+- [x] Recuperar o servidor gerenciado após a falha do watcher do Metro.
+- [x] Confirmar portas, preview web e API antes de retomar o Pluggy Connect.
+- [x] Diagnosticar a falha de conexão do Expo com a API e o preview web.
+- [x] Corrigir a URL de API ou a exposição de rede necessária para o Expo.
+- [x] Validar a conexão no Expo após reiniciar os serviços.
+- [ ] Reproduzir e identificar o erro persistente de conexão no Expo Go.
+- [ ] Validar o endpoint HTTPS e a rota tRPC acessados pelo aparelho.
+- [ ] Aplicar a correção definitiva e testar novamente no Expo Go.
+- [x] Restabelecer uma sessão pública válida do sandbox para o Expo Go.
+- [x] Gerar e validar um novo QR Code antes de retomar o teste no celular.
+- [x] Investigar o link HTTPS que não conclui a atualização e não abre no celular.
+- [x] Corrigir cache ou sessão pública instável da PWA.
+- [ ] Validar novamente um acesso testável sem depender de sessão expirada.
+- [x] Reproduzir e identificar o loop “Organizando suas informações…” na PWA.
+- [x] Corrigir a inicialização web e remover a causa do loop de cache ou bootstrap.
+- [x] Hospedar uma versão PWA estável em HTTPS e validar o acesso no celular.
+- [x] Diagnosticar a página de manutenção no domínio publicado.
+- [x] Corrigir build, inicialização ou configuração de produção responsável pela manutenção.
+- [ ] Validar novamente o domínio publicado e a aplicação em produção.
+- [x] Corrigir a falha de build em produção causada pelo cache web do react-native-css-interop.
+- [x] Validar novamente o build web e o bundle do backend após a correção.
+- [x] Preparar os comandos e variáveis para publicação externa no Render.
+- [x] Corrigir o erro de assinatura do Corepack que impede a instalação do pnpm no Render.
+- [x] Validar o novo comando de build e instruir o redeploy no Render.
+- [ ] Configurar o novo Web Service do Render conectado ao repositório correto.
+- [ ] Aplicar os comandos compatíveis com pnpm e as variáveis seguras do Pluggy no novo serviço.
+- [ ] Executar e validar o primeiro deploy do serviço recriado.
+- [ ] Preparar um ZIP limpo do projeto sem node_modules, builds, cache ou credenciais.
+- [ ] Verificar o pacote e entregar o arquivo para envio ao GitHub.
