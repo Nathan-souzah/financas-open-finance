@@ -1,11 +1,18 @@
 import * as Linking from "expo-linking";
 import * as ReactNative from "react-native";
 
+import { normalizeApiBaseUrl } from "../lib/api-base-url";
+export { normalizeApiBaseUrl } from "../lib/api-base-url";
+
 // Extract scheme from bundle ID (last segment timestamp, prefixed with "manus")
 // e.g., "space.manus.my.app.t20240115103045" -> "manus20240115103045"
 const bundleId = "com.app.financasopenfinance";
 const timestamp = bundleId.split(".").pop()?.replace(/^t/, "") ?? "";
 const schemeFromBundleId = `manus${timestamp}`;
+
+// Fallback público de desenvolvimento para aparelhos físicos; localhost no celular
+// aponta para o próprio aparelho e não para o servidor do projeto.
+const DEVELOPMENT_API_BASE_URL = "https://3000-iwc8l0ttj8guhryyggfun-8db8ed73.us4.manus.computer";
 
 const env = {
   portal: process.env.EXPO_PUBLIC_OAUTH_PORTAL_URL ?? "",
@@ -32,7 +39,7 @@ export const API_BASE_URL = env.apiBaseUrl;
 export function getApiBaseUrl(): string {
   // If API_BASE_URL is set, use it
   if (API_BASE_URL) {
-    return API_BASE_URL.replace(/\/$/, "");
+    return normalizeApiBaseUrl(API_BASE_URL);
   }
 
   // On web, derive from current hostname by replacing port 8081 with 3000
@@ -43,6 +50,11 @@ export function getApiBaseUrl(): string {
     if (apiHostname !== hostname) {
       return `${protocol}//${apiHostname}`;
     }
+  }
+
+  // On native, use the public development API instead of localhost.
+  if (ReactNative.Platform.OS !== "web") {
+    return DEVELOPMENT_API_BASE_URL;
   }
 
   // Fallback to empty (will use relative URL)
