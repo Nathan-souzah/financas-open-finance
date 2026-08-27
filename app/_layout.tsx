@@ -9,7 +9,6 @@ import { Platform } from "react-native";
 import "@/lib/_core/nativewind-pressable";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { FinanceProvider } from "@/lib/finance/finance-provider";
-import { PwaRegister } from "@/components/pwa-register";
 import {
   SafeAreaFrameContext,
   SafeAreaInsetsContext,
@@ -94,7 +93,6 @@ export default function RootLayout() {
               <Stack.Screen name="open-finance" options={{ headerShown: true, title: "Open Finance", presentation: "modal" }} />
               <Stack.Screen name="oauth/callback" />
             </Stack>
-            <PwaRegister />
             <StatusBar style="auto" />
           </FinanceProvider>
         </QueryClientProvider>

@@ -50,14 +50,14 @@ export default function AccountsScreen() {
         ListHeaderComponent={
           <View>
             <Text style={styles.title}>Contas</Text>
-            <Text style={styles.subtitle}>Gerencie contas manuais ou conecte uma instituição para sincronizar seus dados autorizados.</Text>
+            <Text style={styles.subtitle}>Reúna suas contas manuais agora e conecte instituições quando estiver pronto.</Text>
 
             <Pressable accessibilityRole="button" onPress={() => router.push("/open-finance")} style={({ pressed }) => [styles.openFinanceCard, pressed && styles.pressed]}>
               <View style={styles.openFinanceIcon}><IconSymbol name="building.columns.fill" size={24} color="#FFFFFF" /></View>
               <View style={styles.openFinanceCopy}>
                 <Text style={styles.openFinanceLabel}>OPEN FINANCE</Text>
                 <Text style={styles.openFinanceTitle}>Conecte suas instituições</Text>
-                <Text style={styles.openFinanceText}>Use o Pluggy Connect para autorizar uma instituição e trazer suas contas para cá.</Text>
+                <Text style={styles.openFinanceText}>A conexão segura será ativada quando o provedor estiver definido.</Text>
               </View>
               <IconSymbol name="chevron.right" size={21} color="#BDE6DE" />
             </Pressable>
@@ -111,7 +111,7 @@ function AccountRow({ account, balanceCents, onDelete, styles }: { account: Acco
       <View style={styles.accountIcon}><IconSymbol name="creditcard.fill" size={21} color={styles.accountIconColor.color} /></View>
       <View style={styles.accountCopy}>
         <Text style={styles.accountName}>{account.name}</Text>
-        <Text style={styles.accountMeta}>{account.source === "open_finance" ? account.institutionName ?? "Open Finance" : "Conta manual"}</Text>
+        <Text style={styles.accountMeta}>Conta manual</Text>
       </View>
       <View style={styles.accountRight}>
         <Text style={styles.accountBalance}>{formatCurrency(balanceCents)}</Text>

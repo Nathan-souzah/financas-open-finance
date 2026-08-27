@@ -2,8 +2,6 @@ import { COOKIE_NAME } from "../shared/const.js";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
-import { z } from "zod";
-import { createPluggyConnectToken, fetchPluggyAccounts, fetchPluggyTransactions, normalizePluggyAccount, normalizePluggyTransaction } from "./pluggy";
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -19,24 +17,12 @@ export const appRouter = router({
     }),
   }),
 
-  pluggy: router({
-    createConnectToken: publicProcedure
-      .input(z.object({ clientUserId: z.string().min(1).max(128), oauthRedirectUri: z.string().url().optional() }))
-      .mutation(({ input }) => createPluggyConnectToken(input)),
-    syncItem: publicProcedure
-      .input(z.object({ itemId: z.string().min(1) }))
-      .query(async ({ input }) => {
-        const accountsResponse = await fetchPluggyAccounts(input.itemId);
-        const accounts = (accountsResponse.results ?? []).map(normalizePluggyAccount);
-        const transactions = (await Promise.all(
-          (accountsResponse.results ?? []).map(async (account) => {
-            const response = await fetchPluggyTransactions(account.id);
-            return (response.results ?? []).map(normalizePluggyTransaction);
-          }),
-        )).flat();
-        return { accounts, transactions };
-      }),
-  }),
+  // TODO: add feature routers here, e.g.
+  // todo: router({
+  //   list: protectedProcedure.query(({ ctx }) =>
+  //     db.getUserTodos(ctx.user.id)
+  //   ),
+  // }),
 });
 
 export type AppRouter = typeof appRouter;

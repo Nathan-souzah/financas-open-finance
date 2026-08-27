@@ -7,10 +7,6 @@ const bundleId = "com.app.financasopenfinance";
 const timestamp = bundleId.split(".").pop()?.replace(/^t/, "") ?? "";
 const schemeFromBundleId = `manus${timestamp}`;
 
-// Fallback público de desenvolvimento para aparelhos físicos; localhost no celular
-// aponta para o próprio aparelho e não para o servidor do projeto.
-const DEVELOPMENT_API_BASE_URL = "https://3000-iwc8l0ttj8guhryyggfun-8db8ed73.us4.manus.computer";
-
 const env = {
   portal: process.env.EXPO_PUBLIC_OAUTH_PORTAL_URL ?? "",
   server: process.env.EXPO_PUBLIC_OAUTH_SERVER_URL ?? "",
@@ -47,11 +43,6 @@ export function getApiBaseUrl(): string {
     if (apiHostname !== hostname) {
       return `${protocol}//${apiHostname}`;
     }
-  }
-
-  // On native, use the public development API instead of localhost.
-  if (ReactNative.Platform.OS !== "web") {
-    return DEVELOPMENT_API_BASE_URL;
   }
 
   // Fallback to empty (will use relative URL)

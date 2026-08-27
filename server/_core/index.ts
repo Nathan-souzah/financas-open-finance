@@ -2,7 +2,6 @@ import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
 import net from "net";
-import path from "path";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
@@ -70,17 +69,6 @@ async function startServer() {
       createContext,
     }),
   );
-
-  // Em produção, o mesmo processo serve o build web da Expo e o backend.
-  // As rotas /api/* permanecem acima do fallback da aplicação.
-  if (process.env.NODE_ENV === "production") {
-    const webDirectory = path.join(process.cwd(), "dist-web");
-    app.use(express.static(webDirectory));
-    app.get("*", (req, res, next) => {
-      if (req.path.startsWith("/api/")) return next();
-      res.sendFile(path.join(webDirectory, "index.html"));
-    });
-  }
 
   const preferredPort = parseInt(process.env.PORT || "3000");
   const port = await findAvailablePort(preferredPort);

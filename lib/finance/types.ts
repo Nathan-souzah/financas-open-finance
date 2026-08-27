@@ -12,9 +12,6 @@ export type Account = {
   name: string;
   openingBalanceCents: number;
   source: "manual" | "open_finance";
-  externalId?: string;
-  institutionName?: string;
-  connectionId?: string;
   createdAt: string;
 };
 
@@ -33,7 +30,6 @@ export type FinanceData = {
   accounts: Account[];
   transactions: Transaction[];
   monthlyBudgetCents: number | null;
-  connections: OpenFinanceConnection[];
 };
 
 export type TransactionDraft = Omit<Transaction, "id" | "createdAt">;
@@ -42,10 +38,7 @@ export type OpenFinanceConnection = {
   id: string;
   providerId: string;
   institutionName: string;
-  itemId?: string;
   status: "pending" | "connected" | "expired" | "revoked" | "error";
-  lastSyncedAt?: string;
-  errorMessage?: string;
   connectedAt?: string;
   expiresAt?: string;
 };

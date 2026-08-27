@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { IconSymbol } from "@/components/ui/icon-symbol";
@@ -36,13 +36,22 @@ function TransactionPreview({ transaction }: { transaction: Transaction }) {
 export default function HomeScreen() {
   const colors = useColors();
   const styles = createStyles(colors);
-  const { data } = useFinance();
+  const { data, ready } = useFinance();
   const totals = monthTotals(data.transactions);
   const balance = consolidatedBalance(data);
   const recentTransactions = [...data.transactions]
     .sort((a, b) => b.occurredOn.localeCompare(a.occurredOn))
     .slice(0, 4);
   const budgetUsed = data.monthlyBudgetCents ? Math.min((totals.expenseCents / data.monthlyBudgetCents) * 100, 100) : 0;
+
+  if (!ready) {
+    return (
+      <ScreenContainer className="items-center justify-center">
+        <ActivityIndicator color={colors.primary} size="large" />
+        <Text style={styles.loadingText}>Organizando suas informações…</Text>
+      </ScreenContainer>
+    );
+  }
 
   return (
     <ScreenContainer>
@@ -146,6 +155,7 @@ export default function HomeScreen() {
 
 const createStyles = (colors: ThemeColorPalette) => StyleSheet.create({
   listContent: { padding: 20, paddingBottom: 36 },
+  loadingText: { color: colors.muted, fontSize: 15, marginTop: 14 },
   topline: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 },
   eyebrow: { color: colors.primary, fontSize: 11, fontWeight: "800", letterSpacing: 1.4, marginBottom: 5 },
   greeting: { color: colors.foreground, fontSize: 25, fontWeight: "700", letterSpacing: -0.5 },

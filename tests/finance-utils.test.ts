@@ -25,7 +25,6 @@ describe("utilitários financeiros", () => {
       accounts: [{ id: "a1", name: "Conta", openingBalanceCents: 10000, source: "manual", createdAt: "2026-08-01T00:00:00.000Z" }],
       transactions,
       monthlyBudgetCents: null,
-      connections: [],
     };
     expect(consolidatedBalance(data)).toBe(255210);
   });

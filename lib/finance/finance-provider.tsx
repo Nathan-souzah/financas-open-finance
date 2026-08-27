@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, type PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import type { Account, FinanceData, OpenFinanceConnection, Transaction, TransactionDraft } from "./types";
+import type { Account, FinanceData, Transaction, TransactionDraft } from "./types";
 
 const STORAGE_KEY = "@financas-open-finance/finance-data-v1";
 
@@ -9,7 +9,6 @@ const EMPTY_DATA: FinanceData = {
   accounts: [],
   transactions: [],
   monthlyBudgetCents: null,
-  connections: [],
 };
 
 type FinanceContextValue = {
@@ -21,11 +20,6 @@ type FinanceContextValue = {
   addAccount: (input: Pick<Account, "name" | "openingBalanceCents">) => void;
   removeAccount: (id: string) => void;
   setMonthlyBudgetCents: (value: number | null) => void;
-  syncOpenFinanceData: (input: {
-    connection: OpenFinanceConnection;
-    accounts: Array<{ externalId: string; institutionName: string; accountName: string; balanceCents: number }>;
-    transactions: Array<{ externalId: string; accountExternalId: string; amountCents: number; type: "income" | "expense"; description: string; occurredOn: string }>;
-  }) => void;
 };
 
 const FinanceContext = createContext<FinanceContextValue | null>(null);
@@ -39,7 +33,6 @@ const asPersistedData = (candidate: unknown): FinanceData => {
     accounts: Array.isArray(data.accounts) ? data.accounts : [],
     transactions: Array.isArray(data.transactions) ? data.transactions : [],
     monthlyBudgetCents: typeof data.monthlyBudgetCents === "number" ? data.monthlyBudgetCents : null,
-    connections: Array.isArray(data.connections) ? data.connections : [],
   };
 };
 
@@ -51,10 +44,7 @@ export function FinanceProvider({ children }: PropsWithChildren) {
     let active = true;
     const load = async () => {
       try {
-        const stored = await Promise.race([
-          AsyncStorage.getItem(STORAGE_KEY),
-          new Promise<string | null>((resolve) => setTimeout(() => resolve(null), 2500)),
-        ]);
+        const stored = await AsyncStorage.getItem(STORAGE_KEY);
         if (stored && active) setData(asPersistedData(JSON.parse(stored)));
       } catch {
         if (active) setData(EMPTY_DATA);
@@ -143,60 +133,6 @@ export function FinanceProvider({ children }: PropsWithChildren) {
     [updateData],
   );
 
-  const syncOpenFinanceData = useCallback(
-    (input: {
-      connection: OpenFinanceConnection;
-      accounts: Array<{ externalId: string; institutionName: string; accountName: string; balanceCents: number }>;
-      transactions: Array<{ externalId: string; accountExternalId: string; amountCents: number; type: "income" | "expense"; description: string; occurredOn: string }>;
-    }) => {
-      updateData((current) => {
-        const now = new Date().toISOString();
-        const accountIdByExternalId = new Map<string, string>();
-        const nextAccounts = [...current.accounts];
-        for (const imported of input.accounts) {
-          const existing = nextAccounts.find((account) => account.source === "open_finance" && account.externalId === imported.externalId);
-          const accountId = existing?.id ?? createId("open-account");
-          accountIdByExternalId.set(imported.externalId, accountId);
-          const nextAccount: Account = {
-            id: accountId,
-            name: imported.accountName,
-            openingBalanceCents: imported.balanceCents,
-            source: "open_finance",
-            externalId: imported.externalId,
-            institutionName: imported.institutionName,
-            connectionId: input.connection.id,
-            createdAt: existing?.createdAt ?? now,
-          };
-          const index = nextAccounts.findIndex((account) => account.id === accountId);
-          if (index >= 0) nextAccounts[index] = nextAccount;
-          else nextAccounts.unshift(nextAccount);
-        }
-
-        const importedTransactions = input.transactions.flatMap((imported) => {
-          const accountId = accountIdByExternalId.get(imported.accountExternalId);
-          if (!accountId) return [];
-          const existing = current.transactions.find((transaction) => transaction.id === `pluggy-${imported.externalId}`);
-          return [{
-            id: `pluggy-${imported.externalId}`,
-            amountCents: imported.amountCents,
-            type: imported.type,
-            description: imported.description,
-            categoryId: "outros",
-            accountId,
-            occurredOn: imported.occurredOn,
-            createdAt: existing?.createdAt ?? now,
-          } satisfies Transaction];
-        });
-        const importedIds = new Set(importedTransactions.map((transaction) => transaction.id));
-        const localTransactions = current.transactions.filter((transaction) => !importedIds.has(transaction.id));
-        const nextConnections = current.connections.filter((connection) => connection.id !== input.connection.id);
-        nextConnections.push(input.connection);
-        return { ...current, accounts: nextAccounts, transactions: [...importedTransactions, ...localTransactions], connections: nextConnections };
-      });
-    },
-    [updateData],
-  );
-
   const value = useMemo(
     () => ({
       data,
@@ -207,9 +143,8 @@ export function FinanceProvider({ children }: PropsWithChildren) {
       addAccount,
       removeAccount,
       setMonthlyBudgetCents,
-      syncOpenFinanceData,
     }),
-    [addAccount, addTransaction, data, ready, removeAccount, removeTransaction, setMonthlyBudgetCents, syncOpenFinanceData, updateTransaction],
+    [addAccount, addTransaction, data, ready, removeAccount, removeTransaction, setMonthlyBudgetCents, updateTransaction],
   );
 
   return <FinanceContext.Provider value={value}>{children}</FinanceContext.Provider>;
